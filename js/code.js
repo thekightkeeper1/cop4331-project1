@@ -1,4 +1,4 @@
-const urlBase = 'http://colors.kite-keeper.com/LAMPAPI';
+const urlBase = 'http://contacts.kite-keeper.com/LAMPAPI';
 const extension = 'php';
 
 let userId = 0;
