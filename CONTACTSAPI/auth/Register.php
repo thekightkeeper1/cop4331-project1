@@ -1,4 +1,3 @@
-
 <?php
 
 	require_once '../db_config.php';
@@ -7,30 +6,28 @@
 	$inData = getRequestInfo();
 
     # Variables for the register details
-	$id = 0;
-	$firstName = "";
-	$lastName = "";
+	$newId = 0;
+
+	// # Checking that the user does not exist
+	// $sql = "SELECT id FROM users WHERE username = ";
 
 	# Preparing the query with placeholders
-	$sql = "INSERT INTO users (firstname, lastname, login, password) VALUES (:fname, :lname, :uname, :pass)";
+	$sql = "INSERT INTO users (firstname, lastname, username, password) VALUES (:fname, :lname, :uname, :pass)";
 	$stmt = $pdo->prepare($sql);
+
 	# Running the query and populating placeholders
-	$stmt->execute([
-		'uname' => $inData["username"],
-		'fname' => $inData['password'],
+	$worked = $stmt->execute([
+		'fname' => $inData['firstName'],
 		'lname' => $inData['lastName'],
+		'uname' => $inData["userName"],
 		'pass' => $inData['password'],
 	]);
 
-
-	# Ex
-	if ($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
-		echo "worked";
-		returnWithInfo( $user['firstName'], $user['lastName'], $user['ID'] );
-	}
-	else
+	if ($worked) {
+		returnWithInfo($pdo->lastInsertId());
+	} else
 	{
-		returnWithError("No Records Found");
+		returnWithError("Unknown error occurred.");
 	}
 
 	# Closing the cursor we used. Not necessary unless we didn't read all of the rows.
@@ -53,9 +50,9 @@
 		sendResultInfoAsJson( $retValue );
 	}
 	
-	function returnWithInfo( $firstName, $lastName, $id )
+	function returnWithInfo($id)
 	{
-		$retValue = '{"id":' . $id . ',"firstName":"' . $firstName . '","lastName":"' . $lastName . '","error":""}';
+		$retValue = '{"id":' . $id . '","error":""}';
 		sendResultInfoAsJson( $retValue );
 	}
 	
