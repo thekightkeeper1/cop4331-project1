@@ -14,6 +14,7 @@
 	# Preparing the query with placeholders
 	$sql = "SELECT ID,firstName,lastName FROM users WHERE Login= :username AND Password = :pass";
 	$stmt = $pdo->prepare($sql);
+
 	# Running the query and populating placeholders
 	$stmt->execute([
 		'username' => $inData["username"],
@@ -23,7 +24,6 @@
 
 	# Resolving the data into a associative array format
 	if ($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
-		echo "worked";
 		returnWithInfo( $user['firstName'], $user['lastName'], $user['ID'] );
 	}
 	else
