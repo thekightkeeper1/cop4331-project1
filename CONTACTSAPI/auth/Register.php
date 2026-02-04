@@ -9,7 +9,15 @@
 	$newId = 0;
 
 	// # Checking that the user does not exist
-	// $sql = "SELECT id FROM users WHERE username = ";
+	$sql = "SELECT id FROM users WHERE username = :uname";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([
+		'uname' => $inData['userName'],
+	]);
+	if ($stmt->fetch(PDO::FETCH_ASSOC)) {
+		returnWithError("Username already exists");
+		exit();
+	}
 
 	# Preparing the query with placeholders
 	$sql = "INSERT INTO users (firstname, lastname, username, password) VALUES (:fname, :lname, :uname, :pass)";
@@ -47,7 +55,7 @@
 
 
 	function returnWithError($err)
-	{
+{
     // 1. Create an associative array
     $retValue = [
         "id"    => 0,
@@ -58,7 +66,7 @@
     $jsonResponse = json_encode($retValue);
 
     sendResultInfoAsJson($jsonResponse);
-	}
+}
 	
 	function returnWithInfo($id)
 	{
