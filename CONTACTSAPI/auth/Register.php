@@ -15,7 +15,7 @@
 	$sql = "INSERT INTO users (firstname, lastname, username, password) VALUES (:fname, :lname, :uname, :pass)";
 	$stmt = $pdo->prepare($sql);
 
-	# Running the query and populating placeholders
+	# Running the query and populating placeLholders
 	$worked = $stmt->execute([
 		'fname' => $inData['firstName'],
 		'lname' => $inData['lastName'],
@@ -44,16 +44,29 @@
 		echo $obj;
 	}
 	
-	function returnWithError( $err )
+
+
+	function returnWithError($err)
 	{
-		$retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
-		sendResultInfoAsJson( $retValue );
+    // 1. Create an associative array
+    $retValue = [
+        "id"    => 0,
+        "error" => $err
+    ];
+
+    // 2. Convert the array to a JSON string
+    $jsonResponse = json_encode($retValue);
+
+    sendResultInfoAsJson($jsonResponse);
 	}
 	
 	function returnWithInfo($id)
 	{
-		$retValue = '{"id":' . $id . '","error":""}';
-		sendResultInfoAsJson( $retValue );
+		$retValue = [
+			"id" => $id,
+			"error" => "",
+		];
+		sendResultInfoAsJson( json_encode($retValue) );
 	}
 	
 ?>
