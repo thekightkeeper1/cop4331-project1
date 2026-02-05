@@ -82,7 +82,7 @@
 	}
 	
 	function isMissingParameter($inputJson) {
-		// Requires that they both have the same exact keys. Posted json cannot have extra keys.
+		// Requires that the posted json has at least the keys in expected. 
 		$expected = array_flip(['firstName', 'lastName', 'userName', 'password']);
 
 		$missingKeys = array_diff_key($expected, $inputJson);
