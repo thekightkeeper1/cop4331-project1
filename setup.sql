@@ -12,6 +12,8 @@ CREATE TABLE
         PRIMARY KEY (`ID`)
     ) ENGINE = InnoDB
 
+delete from users where userid = 1 and id 1;
+
 CREATE TABLE
     `project1`.`contacts` (
         `ID` INT NOT NULL AUTO_INCREMENT,
