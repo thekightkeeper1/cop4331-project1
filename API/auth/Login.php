@@ -16,7 +16,7 @@
 	$lastName = "";
 
 	# Preparing the query with placeholders
-	$sql = "SELECT ID,firstName,lastName FROM users WHERE Login= :username AND Password = :pass";
+	$sql = "SELECT ID,firstName,lastName FROM users WHERE username= :username AND password = :pass";
 	$stmt = $pdo->prepare($sql);
 
 	# Running the query and populating placeholders
