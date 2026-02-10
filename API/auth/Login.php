@@ -5,6 +5,10 @@
 
     # Get the post request body
 	$inData = getRequestInfo();
+	if (isMissingParameter($inData)) {
+		returnWithError('Missing or incorrect json keys.');
+		exit();
+	}
 
     # Variables for the register details
 	$id = 0;
@@ -55,6 +59,14 @@
 	{
 		$retValue = '{"id":' . $id . ',"firstName":"' . $firstName . '","lastName":"' . $lastName . '","error":""}';
 		sendResultInfoAsJson( $retValue );
+	}
+
+	function isMissingParameter($inputJson) {
+		// Requires that the posted json has at least the keys in expected. 
+		$expected = array_flip(['userName', 'password']);
+
+		$missingKeys = array_diff_key($expected, $inputJson);
+		return count($missingKeys) == 0;
 	}
 	
 ?>
