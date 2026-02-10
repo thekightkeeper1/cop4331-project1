@@ -1,28 +1,25 @@
-create database project1;
-
-use project1;
+-- create database project1;
+use COP4331;
 
 CREATE TABLE
-    `project1`.`users` (
+    `users` (
         `ID` INT NOT NULL AUTO_INCREMENT,
         `firstname` VARCHAR(50) NOT NULL DEFAULT '',
         `lastname` VARCHAR(50) NOT NULL DEFAULT '',
         `username` VARCHAR(50) NOT NULL DEFAULT '',
-        `password` VARCHAR(50) NOT NULL DEFAULT '',
+        `password` VARCHAR(60) NOT NULL DEFAULT '',
         PRIMARY KEY (`ID`)
-    ) ENGINE = InnoDB
-
-delete from users where userid = 1 and id 1;
+    ) ENGINE = InnoDB;
 
 CREATE TABLE
-    `project1`.`contacts` (
+    `contacts` (
         `ID` INT NOT NULL AUTO_INCREMENT,
         `firstname` VARCHAR(50) NOT NULL DEFAULT '',
         `lastname` VARCHAR(50) NOT NULL DEFAULT '',
         `email` VARCHAR(50) NOT NULL DEFAULT '',
         `phone` VARCHAR(50) NOT NULL DEFAULT '',
         `UserID` INT NOT NULL DEFAULT 0,
-        PRIMARY KEY (`ID`), -- <--- THIS COMMA IS REQUIRED
+        PRIMARY KEY (`ID`),
         CONSTRAINT `fk_contacts_users` FOREIGN KEY (`UserID`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB;
 
@@ -30,10 +27,49 @@ INSERT INTO
     users (firstname, lastname, username, password)
 VALUES
     ("Ty", "Singh", "kight", "admin123");
+INSERT INTO
+    users (firstname, lastname, username, password)
+VALUES
+    ("Daniyl", "idk", "carman", "vroom");
+
 
 INSERT INTO
     contacts (firstname, phone, userid)
 VALUES
-    ("Daniyl", "123456680", 1);
+    ("john", "123456680", 1);
 
-DELETE FROM `users` where `id` MATCHES 2; = 
+INSERT INTO
+    contacts (firstname, phone, userid)
+VALUES
+    ("jane", "123456680", 1);
+
+INSERT INTO
+    contacts (firstname, phone, userid)
+VALUES
+    ("jack", "123456680", 1);
+
+
+INSERT INTO
+    contacts (firstname, phone, userid)
+VALUES
+    ("jill", "123456680", 1);
+
+INSERT INTO
+    contacts (firstname, phone, userid)
+VALUES
+    ("john", "123456680", 2);
+
+INSERT INTO
+    contacts (firstname, phone, userid)
+VALUES
+    ("jane", "123456680", 2);
+
+INSERT INTO
+    contacts (firstname, phone, userid)
+VALUES
+    ("jack", "123456680", 2);
+
+INSERT INTO
+    contacts (firstname, phone, userid)
+VALUES
+    ("jill", "123456680", 2);
