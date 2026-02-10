@@ -4,9 +4,13 @@
 
     # Get the post request body
 	$inData = getRequestInfo();
+	if (isMissingParameter($inData)) {
+		returnWithError('Missing or incorrect json keys.');
+		exit();
+	}
 
     # Variables for the register details
-	$newId = 0;
+	$newId = 0; 
 
 	// $sql = sprintf("select id from users where username = %s", $inData["userName"]);
 	// # Checking that the user does not exist
@@ -80,4 +84,12 @@
 		sendResultInfoAsJson( json_encode($retValue) );
 	}
 	
+	function isMissingParameter($inputJson) {
+		// Requires that the posted json has at least the keys in expected. 
+		$expected = array_flip(['firstName', 'lastName', 'userName', 'password']);
+
+		$missingKeys = array_diff_key($expected, $inputJson);
+		return count($missingKeys) > 0;
+	}
+
 ?>
