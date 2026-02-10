@@ -1,7 +1,9 @@
 
 <?php
 
+
 	require_once '../db_config.php';
+	require_once '../no_cors.php';
 
     # Get the post request body
 	$inData = getRequestInfo();
