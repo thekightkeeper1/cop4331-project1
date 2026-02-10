@@ -1,6 +1,11 @@
 create database COP4331;
 use COP4331;
 
+create user 'karel' identified by 'group9';
+Now we need to grant permissions to the database for that user:
+grant all privileges on COP4331.* to 'karel'@'%';
+
+
 CREATE TABLE
     `users` (
         `ID` INT NOT NULL AUTO_INCREMENT,
