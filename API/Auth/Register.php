@@ -10,18 +10,21 @@
 	}
 
     # Variables for the register details
-	$newId = 0;
+	$newId = 0; 
 
+	// $sql = sprintf("select id from users where username = %s", $inData["userName"]);
 	// # Checking that the user does not exist
-	$sql = "SELECT id FROM users WHERE username = :uname";
-	$stmt = $pdo->prepare($sql);
-	$stmt->execute([
+	$sql = "SELECT id FROM users WHERE username = :uname";  // This is a sql string with placeholders will data will go
+	$stmt = $pdo->prepare($sql);  // starts the sql connection with our string
+	$stmt->execute([  // This populates the placeholders with acctual data
 		'uname' => $inData['userName'],
 	]);
+
 	if ($stmt->fetch(PDO::FETCH_ASSOC)) {
 		returnWithError("Username already exists");
 		exit();
 	}
+
 
 	# Preparing the query with placeholders
 	$sql = "INSERT INTO users (firstname, lastname, username, password) VALUES (:fname, :lname, :uname, :pass)";
