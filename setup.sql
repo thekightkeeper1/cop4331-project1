@@ -1,4 +1,4 @@
--- create database project1;
+create database project1;
 use COP4331;
 
 CREATE TABLE
