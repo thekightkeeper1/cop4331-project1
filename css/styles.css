@@ -32,7 +32,8 @@ body
 #header {
     background-color: var(--primary);
     height: var(--header);
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
@@ -41,22 +42,23 @@ body
     z-index: 100;
 }
 
-#logo
-{
-    background-color: var(--secondary);
-    color: var(--text-white);
-    padding: 15px 25px;
-    font-size: 24px;
-    border-radius: var(--small-radius);
-    font-weight: bold;
-    box-shadow: 0 2px 8px var(--shadow-light);
+#header > :last-child {
+    justify-self: end;
 }
 
-#logo:hover
+#logo
+{
+    display: block;
+    height: 60px;
+    width: auto;
+    align-self: center;
+}
+
+/* #logo:hover
 {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px var(--shadow-med);
-}
+} */
 
 #title 
 {
@@ -73,7 +75,10 @@ body
 .header-button {
     background-color: var(--secondary);
     color: var(--text-white);
-    padding: 12px 35px;
+    padding: 12px 20px;
+    min-width: 80px;
+    max-width: 120px;
+    text-align: center;
     font-size: 18px;
     border-radius: var(--small-radius);
     text-decoration: none;
@@ -117,15 +122,23 @@ input[type="text"],input[type="password"]{
     transition: all 0.3s ease;
 }
 
-input[type="text"]::placeholder, 
+input[type="text"]::placeholder {
+    color: var(--text);
+    opacity: 0.5;
+    font-family: var(--font);
+}
 input[type="password"]::placeholder {
     color: var(--text);
-    opacity: 1;
+    opacity: 0.5;
     font-family: var(--font);
-    box-shadow:  0 0 0 3px rgba(86, 113, 137, 0.2);
+    /* box-shadow:  0 0 0 3px rgba(86, 113, 137, 0.2); */
 }
 
-input[type="text"]:focus,
+input[type="text"]:focus {
+    color: var(--text);
+    opacity: 0.7;
+    font-family: var(--font);
+}
 input[type="password"]:focus {
     color: var(--text);
     opacity: 0.7;
@@ -138,8 +151,9 @@ input[type="password"]:focus {
     border: none;
     border-radius: var(--big-radius);
     background-color: var(--primary);
-    font-size: 18px;
+    font-size: 24px;
     font-family: var(--font);
+    color: var(--text-white);
     cursor: pointer;
     margin-top: 16px;
     transition: background-color 0.3s, opacity 0.3s;
@@ -185,7 +199,12 @@ input[type="password"]:focus {
     background-color: #b2b2b2;
 }
 
-
+#inner-title
+{
+    font-size: 30px;
+    display: inline-block;
+    margin-bottom: 30px;
+}
 #loginName
 {
 	font-size: 30px;
@@ -193,6 +212,14 @@ input[type="password"]:focus {
 #loginPassword
 {
 	font-size: 30px;
+}
+#registerFirstName
+{
+    font-size: 30px;
+}
+#registerLastName
+{
+    font-size: 30px;
 }
 #searchText
 {
@@ -222,6 +249,10 @@ select{
     margin-top: 2%;
     font-size: 0.75em;
     font-family: 'Ubuntu', sans-serif;
+}
+
+html {
+    scrollbar-gutter: stable;
 }
 
 #colorSearchResult{
