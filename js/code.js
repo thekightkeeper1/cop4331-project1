@@ -1,4 +1,4 @@
-const urlBase = 'http://contacts.kite-keeper.com/API';
+const urlBase = 'http://localhost/API';
 const extension = 'php';
 
 let userId = 0;
@@ -86,9 +86,9 @@ function addColor()
 	
 }
 
-function searchColor()
+function searchContacts()
 {
-	let srch = document.getElementById("searchText").value;
+	let srch = document.getElementById("searchContacts").value;
 	document.getElementById("colorSearchResult").innerHTML = "";
 	
 	let colorList = "";
