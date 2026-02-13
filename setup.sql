@@ -34,7 +34,7 @@ VALUES
 INSERT INTO
     users (firstname, lastname, username, password)
 VALUES
-    ("Daniyl", "idk", "carman", "vroom");
+    ("Daniyl", "idk", "carman", "512d25bbb054694d9460fde14fa6861d");
 
 
 INSERT INTO

@@ -86,9 +86,9 @@ function addColor()
 	
 }
 
-function searchColor()
+function searchContacts()
 {
-	let srch = document.getElementById("searchText").value;
+	let srch = document.getElementById("searchContacts").value;
 	document.getElementById("colorSearchResult").innerHTML = "";
 	
 	let colorList = "";

@@ -11,7 +11,7 @@ function doLogin()
 	document.getElementById("loginResult").innerHTML = "";
 
 	// let tmp = {login:login,password:password};
-	var tmp = {login:login,password:hash};
+	var tmp = {userName:login,password:hash};
 	let jsonPayload = JSON.stringify( tmp );
 	
 	let url = urlBase + '/Auth/Login.' + extension;
@@ -39,7 +39,7 @@ function doLogin()
 
 				saveCookie();
 	
-				window.location.href = "color.html";
+				window.location.href = "contacts.html";
 			}
 		};
 		xhr.send(jsonPayload);

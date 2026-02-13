@@ -17,14 +17,15 @@
 	$lastName = "";
 
 	# Preparing the query with placeholders
-	$sql = "SELECT ID,firstName,lastName FROM users WHERE username= :userName AND password = :pass";
+	$sql = "SELECT ID,firstName,lastName FROM users WHERE username= :userName AND password = :password";
 	$stmt = $pdo->prepare($sql);
 
 	# Running the query and populating placeholders
 	$stmt->execute([
-		'userName' => $inData["username"],
-		'pass'=> $inData["password"],
+		'userName' => $inData["userName"],
+		'password'=> $inData["password"],
 	]);
+	// $stmt->debugDumpParams();
 
 
 	# Resolving the data into a associative array format
@@ -67,7 +68,7 @@
 		$expected = array_flip(['userName', 'password']);
 
 		$missingKeys = array_diff_key($expected, $inputJson);
-		return count($missingKeys) == 0;
+		return count($missingKeys) != 0;
 	}
 	
 ?>
