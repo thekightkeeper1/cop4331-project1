@@ -1,0 +1,29 @@
+name: Remote SSH Deployment
+
+on:
+  push:
+    branches: [ auto-deployment ] # Runs whenever you push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: main
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Execute remote commands via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22 # Change if your server uses a custom port
+          script: |
+            echo "Connected to $(hostname)"
+            cd /repos/cop4331-project1 | wall
+            git pull origin main | wall
+            ./sync-website | wall
+            
+            echo "Deployment successful!"
