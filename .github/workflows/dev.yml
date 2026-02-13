@@ -22,7 +22,7 @@ jobs:
           port: 22 # Change if your server uses a custom port
           script: |
             echo "Connected to $(hostname)"
-            cd /repos/cop4331-project1 > log.txt
+            cd ./repos/cop4331-project1 > log.txt
             git pull origin main >> log.txt
             ./sync-website >> log.txt
             
