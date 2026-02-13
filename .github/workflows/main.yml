@@ -21,9 +21,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22 # Change if your server uses a custom port
           script: |
-            echo "Connected to $(hostname)"
-            cd /repos/cop4331-project1
-            git pull origin main
-            ./sync-website
+            cd ./repos/cop4331-project1
+            git pull origin main > log.txt
+            ./sync-website.sh >> log.txt
             
-            echo "Deployment successful!"
