@@ -4,8 +4,9 @@
 
     # Get the post request body
 	$inData = getRequestInfo();
+
 	if (isMissingParameter($inData)) {
-		returnWithError('Missing or incorrect json keys.');
+		returnWithError('Missing or incorrect json keys.', 400);
 		exit();
 	}
 
@@ -21,7 +22,7 @@
 	]);
 
 	if ($stmt->fetch(PDO::FETCH_ASSOC)) {
-		returnWithError("Username already exists");
+		returnWithError("Username already exists", 409);
 		exit();
 	}
 
@@ -39,10 +40,10 @@
 	]);
 
 	if ($worked) {
-		returnWithInfo($pdo->lastInsertId());
+		returnWithInfo($pdo->lastInsertId(), 200);
 	} else
 	{
-		returnWithError("Unknown error occurred.");
+		returnWithError("Unknown error occurred.", 400);
 	}
 
 	# Closing the cursor we used. Not necessary unless we didn't read all of the rows.
@@ -53,35 +54,34 @@
 		return json_decode(file_get_contents('php://input'), true);
 	}
 
-	function sendResultInfoAsJson( $obj )
+	function sendResultInfoAsJson( $obj, $code )
 	{
+		http_response_code($code);
 		header('Content-type: application/json');
 		echo $obj;
 	}
 	
 
 
-	function returnWithError($err)
+	function returnWithError($err, $code)
 {
-    // 1. Create an associative array
-    $retValue = [
-        "id"    => 0,
-        "error" => $err
-    ];
+		$retValue = [
+			"id"    => 0,
+			"error" => $err
+		];
 
-    // 2. Convert the array to a JSON string
     $jsonResponse = json_encode($retValue);
 
-    sendResultInfoAsJson($jsonResponse);
+    sendResultInfoAsJson($jsonResponse, $code);
 }
 	
-	function returnWithInfo($id)
+	function returnWithInfo($id, $code)
 	{
 		$retValue = [
 			"id" => $id,
 			"error" => "",
 		];
-		sendResultInfoAsJson( json_encode($retValue) );
+		sendResultInfoAsJson( json_encode($retValue), $code);
 	}
 	
 	function isMissingParameter($inputJson) {

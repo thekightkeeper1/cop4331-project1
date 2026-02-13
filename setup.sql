@@ -30,7 +30,7 @@ CREATE TABLE
 INSERT INTO
     users (firstname, lastname, username, password)
 VALUES
-    ("Ty", "Singh", "kight", "admin123");
+    ("Ty", "Singh", "kight", "0192023a7bbd73250516f069df18b500");
 INSERT INTO
     users (firstname, lastname, username, password)
 VALUES

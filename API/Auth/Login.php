@@ -7,7 +7,7 @@
     # Get the post request body
 	$inData = getRequestInfo();
 	if (isMissingParameter($inData)) {
-		returnWithError('Missing or incorrect json keys.');
+		returnWithError('Missing or incorrect json keys.', 403);
 		exit();
 	}
 
@@ -30,37 +30,36 @@
 
 	# Resolving the data into a associative array format
 	if ($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
-		returnWithInfo( $user['firstName'], $user['lastName'], $user['ID'] );
+		returnWithInfo( 200, $user['firstName'], $user['lastName'], $user['ID'] );
 	}
 	else
 	{
-		returnWithError("No Records Found");
+		returnWithError( "No Records Found", 401);
 	}
 
-	# Closing the cursor we used. Not necessary unless we didn't read all of the rows.
-	// $stmt->closeCursor(); #todo remove this?
 
 	function getRequestInfo()
 	{
 		return json_decode(file_get_contents('php://input'), true);
 	}
 
-	function sendResultInfoAsJson( $obj )
+	function sendResultInfoAsJson( $obj, $code)
 	{
+		http_response_code($code);
 		header('Content-type: application/json');
 		echo $obj;
 	}
 	
-	function returnWithError( $err )
+	function returnWithError( $err, $code )
 	{
 		$retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
-		sendResultInfoAsJson( $retValue );
+		sendResultInfoAsJson( $retValue,  $code);
 	}
 	
-	function returnWithInfo( $firstName, $lastName, $id )
+	function returnWithInfo($code, $firstName, $lastName, $id )
 	{
 		$retValue = '{"id":' . $id . ',"firstName":"' . $firstName . '","lastName":"' . $lastName . '","error":""}';
-		sendResultInfoAsJson( $retValue );
+		sendResultInfoAsJson( $retValue, $code );
 	}
 
 	function isMissingParameter($inputJson) {
@@ -70,5 +69,4 @@
 		$missingKeys = array_diff_key($expected, $inputJson);
 		return count($missingKeys) != 0;
 	}
-	
 ?>
