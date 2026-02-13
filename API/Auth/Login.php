@@ -18,12 +18,12 @@
 	$lastName = "";
 
 	# Preparing the query with placeholders
-	$sql = "SELECT ID,firstName,lastName FROM users WHERE username= :username AND password = :pass";
+	$sql = "SELECT ID,firstName,lastName FROM users WHERE userName= :username AND password = :pass";
 	$stmt = $pdo->prepare($sql);
 
 	# Running the query and populating placeholders
 	$stmt->execute([
-		'username' => $inData["username"],
+		'userName' => $inData["username"],
 		'pass'=> $inData["password"],
 	]);
 
