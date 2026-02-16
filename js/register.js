@@ -8,7 +8,13 @@ function doRegister()
 	let password = document.getElementById("loginPassword").value;
 	var hash = md5( password );
 	
-	document.getElementById("loginResult").innerHTML = "";
+	document.getElementById("registerResult").innerHTML = "";
+
+    if(firstName == "" || lastName == "" || login == "" || password == "")
+    {
+        document.getElementById("registerResult").innerHTML = "Please make sure all fields are filled in!";
+        return;
+    }
 
 	// let tmp = {login:login,password:password};
 	var tmp = {firstName:firstName, lastName:lastName, userName:login,password:hash};
