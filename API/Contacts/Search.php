@@ -19,7 +19,6 @@
 		'userid' => $inData['userId'],
 		'query' => $query,
 	]);
-	var_dump(($stmt));
 
     $result = [];
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
