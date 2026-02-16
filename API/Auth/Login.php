@@ -2,6 +2,7 @@
 <?php
 
 	require_once '../db_config.php';
+	require_once '../utils.php';
 
     # Get the post request body
 	if (!valid_body()) {
@@ -65,17 +66,12 @@
 	}
 
 
-	// Some error checking functions
-	function isMissingParameter($inputJson) {
+	// Some error checking function
+    function isMissingParameter($inputJson) {
 		// Requires that the posted json has at least the keys in expected. 
 		$expected = array_flip(['userName', 'password']);
 
 		$missingKeys = array_diff_key($expected, $inputJson);
 		return count($missingKeys) != 0;
-	}
-
-		function valid_body() {
-		$json = file_get_contents("php://input");
-		return json_validate($json);
 	}
 ?>

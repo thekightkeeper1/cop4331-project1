@@ -1,6 +1,7 @@
 <?php
 
 	require_once '../db_config.php';
+	require_once '../utils.php';
 
     # Get the post request body
 	$inData = getRequestInfo();
@@ -26,7 +27,7 @@
 		exit();
 	}
 
-
+ 
 	# Preparing the query with placeholders
 	$sql = "INSERT INTO users (firstname, lastname, username, password) VALUES (:fname, :lname, :uname, :pass)";
 	$stmt = $pdo->prepare($sql);
