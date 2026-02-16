@@ -34,7 +34,7 @@
 		returnWithInfo("Person Added");
 	} else
 	{
-		returnWithError("Unknown error occurred.");
+		returnWithError("Incorrect info");
 	}
 
 	# Closing the cursor we used. Not necessary unless we didn't read all of the rows.

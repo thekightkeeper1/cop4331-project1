@@ -18,7 +18,7 @@
 		returnWithInfo("Person removed");
 	} else
 	{
-		returnWithError("Person not removed");
+		returnWithError("ID not found");
 	}
 
 	# Closing the cursor we used. Not necessary unless we didn't read all of the rows.
