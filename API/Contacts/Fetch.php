@@ -1,8 +1,12 @@
 <?php
 
 	require_once '../db_config.php';
+	require_once '../utils.php';
 
     # Get the post request body
+	if (!valid_body()) {
+		returnWithError("Body was not valid JSON syntax.", 400);
+	}
 	$inData = getRequestInfo();
 	if (isMissingParameter($inData)) {
 		returnWithError('Missing or incorrect json keys.');
