@@ -19,7 +19,7 @@
     $userId = $user['ID'];
 
     // insert contact into list at user id
-    $sql = "INSERT INTO contacts (firstName, lastName, email, phone, userID) 
+    $sql = "INSERT INTO contacts (firstName, lastName, email, phone, userId) 
             VALUES (:firstName, :lastName, :email, :phone, :userID)";
     $stmt = $pdo->prepare($sql);
 
