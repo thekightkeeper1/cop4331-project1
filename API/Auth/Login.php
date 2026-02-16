@@ -1,13 +1,15 @@
 
 <?php
 
-
 	require_once '../db_config.php';
 
     # Get the post request body
+	if (!valid_body()) {
+		returnWithError("Body was not valid JSON syntax.", 400);
+	}
 	$inData = getRequestInfo();
 	if (isMissingParameter($inData)) {
-		returnWithError('Missing or incorrect json keys.', 403);
+		returnWithError('Missing or incorrect json keys.', 400);
 		exit();
 	}
 
@@ -62,11 +64,18 @@
 		sendResultInfoAsJson( $retValue, $code );
 	}
 
+
+	// Some error checking functions
 	function isMissingParameter($inputJson) {
 		// Requires that the posted json has at least the keys in expected. 
 		$expected = array_flip(['userName', 'password']);
 
 		$missingKeys = array_diff_key($expected, $inputJson);
 		return count($missingKeys) != 0;
+	}
+
+		function valid_body() {
+		$json = file_get_contents("php://input");
+		return json_validate($json);
 	}
 ?>
