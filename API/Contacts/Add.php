@@ -28,7 +28,7 @@
         'lastName'  => $inData["lastName"],
         'email'     => $inData["email"],
         'phone' => $inData["phone"],
-        'userID' => $userId
+        'userId' => $userId
     ]);
 	if ($worked) {
 		returnWithInfo("Person Added");
