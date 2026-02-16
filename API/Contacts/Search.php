@@ -15,7 +15,7 @@
 
 	# Running the query and populating placeLholders
 	$stmt->execute([
-		'userid' => $inData['id'],
+		'userid' => $inData['userId'],
 		'query' => $inData['query'],
 	]);
 
@@ -67,7 +67,7 @@
 	
 	function isMissingParameter($inputJson) {
 		// Requires that the posted json has at least the keys in expected. 
-		$expected = array_flip(['id', 'query']);
+		$expected = array_flip(['userId', 'query']);
 
 		$missingKeys = array_diff_key($expected, $inputJson);
 		return count($missingKeys) > 0;
