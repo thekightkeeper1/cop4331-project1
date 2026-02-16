@@ -14,10 +14,12 @@
 	$stmt = $pdo->prepare($sql);
 
 	# Running the query and populating placeLholders
-	$stmt->execute([
+	$query = "%" . $inData['query'] . "%";
+	$tmp = $stmt->execute([
 		'userid' => $inData['userId'],
-		'query' => $inData['query'],
+		'query' => $query,
 	]);
+	var_dump(($stmt));
 
     $result = [];
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
