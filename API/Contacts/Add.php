@@ -6,30 +6,36 @@
 	$inData = getRequestInfo();
 
     # Variables for the register details
-	$newId = 0;
+	$id = 0;
+	$firstName = "";
+	$lastName = "";
+    $email = "";
 
-	// # Checking that the user does not exist
-	$sql = "SELECT * FROM users WHERE id = :ids";
+	// # find table to insert into
+	$sql = "SELECT * FROM users WHERE username = :uname";
 	$stmt = $pdo->prepare($sql);
 	$stmt->execute([
-		'ids' => $inData['id'],
+		'username' => $inData['username'],
 	]);
 	if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
-		returnWithError("None found");
+		returnWithError("No user found");
 		exit();
 	}
 
 	# Preparing the query with placeholders
-	$sql = "DELETE FROM users WHERE id = :ids";
+	$sql = "INSERT INTO contacts (firstName, lastName, email) 
+            VALUES (:firstName, :lastName, :email)";
 	$stmt = $pdo->prepare($sql);
 
-	# Running the query and populating placeLholders
+	# Running the query and populating placeholders
 	$worked = $stmt->execute([
-		'ids' => $inData["id"],
+		'firstName' => $inData["firstName"], 
+        'lastName'  => $inData["lastName"],
+        'email'     => $inData["email"],
 	]);
 
 	if ($worked) {
-		returnWithInfo("Person removed");
+		returnWithInfo("Person Added");
 	} else
 	{
 		returnWithError("Unknown error occurred.");
