@@ -5,7 +5,7 @@
     # Get the post request body
 	$inData = getRequestInfo();
 	
-	$sql = "SELECT * FROM users WHERE username = :uname";
+	$sql = "SELECT * FROM users WHERE username = :username";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['username' => $inData['username']]);
 
@@ -16,20 +16,19 @@
         exit();
     }
     
-    $userId = $user['id'];
+    $userId = $user['ID'];
 
     // insert contact into list at user id
-    $sql = "INSERT INTO contacts (id, firstName, lastName, email, phone, userID) 
-            VALUES (:id, :firstName, :lastName, :email, :phone, :userID)";
+    $sql = "INSERT INTO contacts (firstName, lastName, email, phone, userID) 
+            VALUES (:firstName, :lastName, :email, :phone, :userID)";
     $stmt = $pdo->prepare($sql);
 
-    $worked = $stmt->execute([
-        'id'   => $inData["id"],      
+    $worked = $stmt->execute([      
         'firstName' => $inData["firstName"], 
         'lastName'  => $inData["lastName"],
         'email'     => $inData["email"],
-        'phone' => $inData['phone'],
-        'userID' => $userId,
+        'phone' => $inData["phone"],
+        'userID' => $userId
     ]);
 	if ($worked) {
 		returnWithInfo("Person Added");
