@@ -5,25 +5,11 @@
     # Get the post request body
 	$inData = getRequestInfo();
 
-    # Variables for the register details
-	$newId = 0;
 
-	// # Checking that the user does not exist
-	$sql = "SELECT * FROM users WHERE id = :ids";
-	$stmt = $pdo->prepare($sql);
-	$stmt->execute([
-		'ids' => $inData['id'],
-	]);
-	if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
-		returnWithError("None found");
-		exit();
-	}
-
-	# Preparing the query with placeholders
-	$sql = "DELETE FROM users WHERE id = :ids";
+	$sql = "DELETE FROM contacts WHERE id = :ids";
 	$stmt = $pdo->prepare($sql);
 
-	# Running the query and populating placeLholders
+	#
 	$worked = $stmt->execute([
 		'ids' => $inData["id"],
 	]);
@@ -32,7 +18,7 @@
 		returnWithInfo("Person removed");
 	} else
 	{
-		returnWithError("Unknown error occurred.");
+		returnWithError("Person not removed");
 	}
 
 	# Closing the cursor we used. Not necessary unless we didn't read all of the rows.

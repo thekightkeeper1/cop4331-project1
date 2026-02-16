@@ -4,36 +4,33 @@
 
     # Get the post request body
 	$inData = getRequestInfo();
-
-    # Variables for the register details
-	$id = 0;
-	$firstName = "";
-	$lastName = "";
-    $email = "";
-
-	// # find table to insert into
+	
 	$sql = "SELECT * FROM users WHERE username = :uname";
-	$stmt = $pdo->prepare($sql);
-	$stmt->execute([
-		'username' => $inData['username'],
-	]);
-	if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
-		returnWithError("No user found");
-		exit();
-	}
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['username' => $inData['username']]);
 
-	# Preparing the query with placeholders
-	$sql = "INSERT INTO contacts (firstName, lastName, email) 
-            VALUES (:firstName, :lastName, :email)";
-	$stmt = $pdo->prepare($sql);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-	# Running the query and populating placeholders
-	$worked = $stmt->execute([
-		'firstName' => $inData["firstName"], 
+    if (!$user) {
+        returnWithError("No user found");
+        exit();
+    }
+    
+    $userId = $user['id'];
+
+    // insert contact into list at user id
+    $sql = "INSERT INTO contacts (id, firstName, lastName, email, phone, userID) 
+            VALUES (:id, :firstName, :lastName, :email, :phone, :userID)";
+    $stmt = $pdo->prepare($sql);
+
+    $worked = $stmt->execute([
+        'id'   => $inData["id"],      
+        'firstName' => $inData["firstName"], 
         'lastName'  => $inData["lastName"],
         'email'     => $inData["email"],
-	]);
-
+        'phone' => $inData['phone'],
+        'userID' => $userId,
+    ]);
 	if ($worked) {
 		returnWithInfo("Person Added");
 	} else
