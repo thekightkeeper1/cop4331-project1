@@ -46,7 +46,7 @@
 		return json_decode(file_get_contents('php://input'), true);
 	}
 
-	function sendResultInfoAsJson( $obj, $code)
+	function sendResponse( $obj, $code)
 	{
 		http_response_code($code);
 		header('Content-type: application/json');
@@ -56,13 +56,13 @@
 	function returnWithError( $err, $code )
 	{
 		$retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
-		sendResultInfoAsJson( $retValue,  $code);
+		sendResponse( $retValue,  $code);
 	}
 	
 	function returnWithInfo($code, $firstName, $lastName, $id )
 	{
 		$retValue = '{"id":' . $id . ',"firstName":"' . $firstName . '","lastName":"' . $lastName . '","error":""}';
-		sendResultInfoAsJson( $retValue, $code );
+		sendResponse( $retValue, $code );
 	}
 
 

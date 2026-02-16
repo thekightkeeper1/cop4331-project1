@@ -55,7 +55,7 @@
 		return json_decode(file_get_contents('php://input'), true);
 	}
 
-	function sendResultInfoAsJson( $obj, $code )
+	function sendResponse( $obj, $code )
 	{
 		http_response_code($code);
 		header('Content-type: application/json');
@@ -73,7 +73,7 @@
 
     $jsonResponse = json_encode($retValue);
 
-    sendResultInfoAsJson($jsonResponse, $code);
+    sendResponse($jsonResponse, $code);
 }
 	
 	function returnWithInfo($id, $code)
@@ -82,7 +82,7 @@
 			"id" => $id,
 			"error" => "",
 		];
-		sendResultInfoAsJson( json_encode($retValue), $code);
+		sendResponse( json_encode($retValue), $code);
 	}
 	
 	function isMissingParameter($inputJson) {

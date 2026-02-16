@@ -43,7 +43,7 @@ require_once "../db_config.php";
 	// $stmt->closeCursor(); #todo remove this?
 
 	function getRequestInfo()
-	{
+	{sendResponse
 		return json_decode(file_get_contents('php://input'), true);
 	}
 
@@ -62,7 +62,7 @@ require_once "../db_config.php";
         "id"    => 0,
         "error" => $err
     ];
-
+sendResponse
     // 2. Convert the array to a JSON string
     $jsonResponse = json_encode($retValue);
 
@@ -71,7 +71,7 @@ require_once "../db_config.php";
 	
 	function returnWithInfo($id)
 	{
-		$retValue = [
+		sendResponse
 			"id" => $id,
 			"error" => "",
 		];

@@ -9,7 +9,7 @@
 	}
 	$inData = getRequestInfo();
 	if (isMissingParameter($inData)) {
-		returnWithError('Missing or incorrect json keys.');
+		returnWithError('Missing or incorrect json keys.', 400);
 		exit();
 	}
 
@@ -29,25 +29,25 @@
         $result[] = $row;
     }
     // $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    returnWithInfo($result);
+    returnWithInfo($result, 200);
 
-	# Closing the cursor we used. Not necessary unless we didn't read all of the rows.
-	// $stmt->closeCursor(); #todo remove this?
+
 
 	function getRequestInfo()
 	{
 		return json_decode(file_get_contents('php://input'), true);
 	}
 
-	function sendResultInfoAsJson( $obj )
+	function sendResponse( $obj , $code)
 	{
+		http_response_code($code);
 		header('Content-type: application/json');
 		echo $obj;
 	}
 	
 
 
-	function returnWithError($err)
+	function returnWithError($err, $code)
 {
     // 1. Create an associative array
     $retValue = [
@@ -58,16 +58,16 @@
     // 2. Convert the array to a JSON string
     $jsonResponse = json_encode($retValue);
 
-    sendResultInfoAsJson($jsonResponse);
+    sendResponse($jsonResponse, $code);
 }
 	
-	function returnWithInfo($rows)
+	function returnWithInfo($rows, $code)
 	{
 		$retValue = [
 			"results" => $rows,
 			"error" => "",
 		];
-		sendResultInfoAsJson( json_encode($retValue) );
+		sendResponse( json_encode($retValue), $code );
 	}
 	
 	function isMissingParameter($inputJson) {

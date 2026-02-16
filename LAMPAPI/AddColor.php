@@ -24,7 +24,7 @@
 		return json_decode(file_get_contents('php://input'), true);
 	}
 
-	function sendResultInfoAsJson( $obj )
+	function sendResponse( $obj )
 	{
 		header('Content-type: application/json');
 		echo $obj;
@@ -33,7 +33,7 @@
 	function returnWithError( $err )
 	{
 		$retValue = '{"error":"' . $err . '"}';
-		sendResultInfoAsJson( $retValue );
+		sendResponse( $retValue );
 	}
 	
 ?>
