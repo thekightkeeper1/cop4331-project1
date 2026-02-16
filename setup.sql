@@ -73,7 +73,35 @@ INSERT INTO
 VALUES
     ("jack", "123456680", 2);
 
+
+
 INSERT INTO
     contacts (firstname, phone, userid)
 VALUES
     ("jill", "123456680", 2);
+
+INSERT INTO
+    contacts (firstname, phone, userid)
+VALUES
+    ("bob", "123456680", 2);
+    
+INSERT INTO
+    contacts (firstname, phone, userid)
+VALUES
+    ("jack", "123456680", 2);
+    
+INSERT INTO
+    contacts (firstname, phone, userid)
+VALUES
+    ("willy", "123456680", 2);
+
+INSERT INTO
+    contacts (firstname, phone, userid)
+VALUES
+    ("eragon", "123456680", 2);
+
+INSERT INTO
+    contacts (firstname, phone, userid)
+VALUES
+    ("james", "123456680", 2);
+
