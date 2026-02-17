@@ -4,19 +4,7 @@
 
     # Get the post request body
 	$inData = getRequestInfo();
-	
-	$sql = "SELECT * FROM users WHERE username = :username";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(['username' => $inData['username']]);
-
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$user) {
-        returnWithError("No user found");
-        exit();
-    }
     
-    $userId = $user['ID'];
 
     // insert contact into list at user id
     $sql = "INSERT INTO contacts (firstName, lastName, email, phone, userId) 
