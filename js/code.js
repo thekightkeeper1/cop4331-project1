@@ -208,7 +208,7 @@ function renderPage()
 			+ '<span class="contact-email">' + currentResults[i].email + '</span>'
 			+ '<span class="contact-actions">'
 			+ '<i class="fa-solid fa-pen-to-square" onclick="editContact(' + currentResults[i].id + ')"></i>'
-			+ '<i class="fa-solid fa-trash" onclick="deleteContact(' + currentResults[i].id + ')"></i>'
+			+ '<i class="fa-solid fa-trash" onclick="deleteContact(' + currentResults[i].ID + ')"></i>'
 			+ '</span>'
 			+ '</div>\r\n';
 	}
@@ -351,7 +351,6 @@ function deleteContact(id)
 			window.alert("Error deleting contact. Please try again.");
 		}
 	}
-	renderPage();
 }
 
 document.addEventListener("DOMContentLoaded", function() {

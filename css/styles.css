@@ -49,16 +49,10 @@ body
 #logo
 {
     display: block;
-    height: 60px;
+    height: 90px;
     width: auto;
     align-self: center;
 }
-
-/* #logo:hover
-{
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--shadow-med);
-} */
 
 #title 
 {
