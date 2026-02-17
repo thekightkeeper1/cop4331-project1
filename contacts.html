@@ -1,4 +1,4 @@
-<html>
+<!DOCTYPE html>
 <head>
 	<title>COP 4331 Contacts App</title>
 	<script type="text/javascript" src="js/md5.js"></script>
@@ -6,7 +6,7 @@
     <link href="css/styles.css" rel="stylesheet">	
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 </head>
-<body>
+<body onload="readCookie(); loadContacts();">
 
 <!--header-->
 <div id = "header">
@@ -17,7 +17,18 @@
 
 <input type="text" id="searchContacts" placeholder="Search name" /><br />
 <button type="button" id="searchButton" class="buttons" onclick="searchContacts();"> Search </button>
+<button onclick="window.location.href='add.html';" class="add-button">+</button>
 <span id="contactSearchResult"></span>
+
+<!-- Contacts List -->
+<div id="contactsList">
+	<!-- dynamic contact loading-->
+</div>
+
+<!-- Pagination -->
+<div id="pagination">
+	<!-- dynamic pagination -->
+</div>
 
 </body>
 </html>
