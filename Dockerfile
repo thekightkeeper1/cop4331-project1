@@ -12,10 +12,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /var/www/html
 
-# Copy all files from your context
-COPY . .
-
-# Crucial: Ensure the script has execution permissions
+COPY ./docker-cmd.sh .
 RUN chmod +x ./docker-cmd.sh
 
 EXPOSE 80
