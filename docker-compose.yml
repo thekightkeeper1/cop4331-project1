@@ -1,7 +1,0 @@
-services:
-  web:
-    build: .
-    ports:
-      - "80:80"
-    volumes:
-      - /home/kight/programming/cprojects/cop4331/cop4331-project1:/var/www/html

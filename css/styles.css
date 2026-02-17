@@ -32,8 +32,8 @@ body
 #header {
     background-color: var(--primary);
     height: var(--header);
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
@@ -49,16 +49,10 @@ body
 #logo
 {
     display: block;
-    height: 60px;
+    height: 90px;
     width: auto;
     align-self: center;
 }
-
-/* #logo:hover
-{
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--shadow-med);
-} */
 
 #title 
 {
@@ -163,7 +157,7 @@ input[type="password"]:focus {
 .buttons:hover{
     transform: translateY(-2px);
     box-shadow: 0 6px 16px var(--shadow-med);
-    background-color: #4a5f75;
+    background-color: #000000;
     opacity: 0.8;
 }
 
@@ -269,6 +263,102 @@ html {
     margin-bottom: 1%;
     font-family: 'Ubuntu', sans-serif;
     color: #95060a;
+}
+
+#searchBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+#searchContacts {
+    width: 50%;
+}
+
+i {
+    cursor: pointer;
+}
+
+.contact-row {
+    display: grid;
+    grid-template-columns: 2fr 2fr 2fr auto;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid black;
+    font-size: 16px;
+    gap: 0;
+}
+
+.contact-name {
+    text-align: left;
+    font-weight: 500;
+    padding-right: 16px;
+    border-right: 1px solid black;
+}
+
+.contact-phone {
+    text-align: left;
+    padding: 0 16px;
+    border-right: 1px solid black;
+}
+
+.contact-email {
+    text-align: left;
+    padding-left: 16px;
+}
+
+.contact-header {
+    font-weight: bold;
+}
+
+.contact-header .contact-name {
+    font-weight: bold;
+}
+
+.contact-actions {
+    display: flex;
+    gap: 12px;
+    padding-left: 16px;
+    min-width: 60px;
+    justify-content: flex-end;
+}
+
+li {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: var(--text);
+}
+
+#pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+    padding: 10px 0;
+}
+
+.page-btn {
+    background-color: var(--primary);
+    color: var(--text-white);
+    border: none;
+    border-radius: var(--big-radius);
+    padding: 8px 14px;
+    font-size: 16px;
+    font-family: var(--font);
+    cursor: pointer;
+}
+
+.page-btn.active {
+    background-color: var(--secondary);
+    font-weight: bold;
+}
+
+.page-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
 }
 
 /*responsiveness*/
