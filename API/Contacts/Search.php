@@ -14,9 +14,10 @@
 	$stmt = $pdo->prepare($sql);
 
 	# Running the query and populating placeLholders
-	$stmt->execute([
-		'userid' => $inData['id'],
-		'query' => $inData['query'],
+	$query = "%" . $inData['query'] . "%";
+	$tmp = $stmt->execute([
+		'userid' => $inData['userId'],
+		'query' => $query,
 	]);
 
     $result = [];
@@ -67,7 +68,7 @@
 	
 	function isMissingParameter($inputJson) {
 		// Requires that the posted json has at least the keys in expected. 
-		$expected = array_flip(['id', 'query']);
+		$expected = array_flip(['userId', 'query']);
 
 		$missingKeys = array_diff_key($expected, $inputJson);
 		return count($missingKeys) > 0;
