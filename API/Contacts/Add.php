@@ -4,21 +4,25 @@
 
     # Get the post request body
 	$inData = getRequestInfo();
+    
 
+    // insert contact into list at user id
+    $sql = "INSERT INTO contacts (firstName, lastName, email, phone, userId) 
+            VALUES (:firstName, :lastName, :email, :phone, :userID)";
+    $stmt = $pdo->prepare($sql);
 
-	$sql = "DELETE FROM contacts WHERE id = :ids";
-	$stmt = $pdo->prepare($sql);
-
-	#
-	$worked = $stmt->execute([
-		'ids' => $inData["id"],
-	]);
-
+    $worked = $stmt->execute([      
+        'firstName' => $inData["firstName"], 
+        'lastName'  => $inData["lastName"],
+        'email'     => $inData["email"],
+        'phone' => $inData["phone"],
+        'userId' => $userId
+    ]);
 	if ($worked) {
-		returnWithInfo("Person removed");
+		returnWithInfo("Person Added");
 	} else
 	{
-		returnWithError("ID not found");
+		returnWithError("Incorrect info");
 	}
 
 	# Closing the cursor we used. Not necessary unless we didn't read all of the rows.
