@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /var/www/html
 
 COPY ./docker-cmd.sh .
+COPY ./setup.sql .
 RUN chmod +x ./docker-cmd.sh
 
 EXPOSE 80
