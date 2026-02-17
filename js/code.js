@@ -1,3 +1,4 @@
+// TODO: redirect to login if going straight to contacts
 const urlBase = 'http://localhost/API';
 const extension = 'php';
 
@@ -141,13 +142,15 @@ function doRegister()
 
 }
 
+const CONTACTS_PER_PAGE = 5;
+let currentPage = 1;
+let currentResults = [];
+
 function searchContacts()
 {
 	readCookie();
 	let srch = document.getElementById("searchContacts").value;
 	document.getElementById("contactSearchResult").innerHTML = "";
-	
-	let contactList = "";
 
 	let tmp = {query:srch,userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
@@ -164,16 +167,18 @@ function searchContacts()
 			if (this.readyState == 4 && this.status == 200) 
 			{
 				let jsonObject = JSON.parse( xhr.responseText );
-				
-				for( let i=0; i<jsonObject.results.length; i++ )
+
+				if(jsonObject.results.length == 0)
 				{
-					contactList += jsonObject.results[i].firstname;
-					if( i < jsonObject.results.length - 1 )
-					{
-						contactList += "<br />\r\n";
-					}
+					document.getElementById("contactSearchResult").innerHTML = "No contacts found with that name!"
+					currentResults = [];
+					renderPagination();
+					return;
 				}
-				document.getElementById("contactSearchResult").innerHTML = contactList;
+				
+				currentResults = jsonObject.results;
+				currentPage = 1;
+				renderPage();
 			}
 		};
 		xhr.send(jsonPayload);
@@ -182,7 +187,65 @@ function searchContacts()
 	{
 		document.getElementById("contactSearchResult").innerHTML = err.message;
 	}
-	
+}
+
+function renderPage()
+{
+	let start = (currentPage - 1) * CONTACTS_PER_PAGE;
+	let end = Math.min(start + CONTACTS_PER_PAGE, currentResults.length);
+	let contactList = '<div class="contact-row contact-header">'
+		+ '<span class="contact-name">Full Name</span>'
+		+ '<span class="contact-phone">Phone</span>'
+		+ '<span class="contact-email">Email</span>'
+		+ '<span class="contact-actions"></span>'
+		+ '</div>\r\n';
+
+	for( let i = start; i < end; i++ )
+	{
+		contactList += '<div class="contact-row">'
+			+ '<span class="contact-name">' + currentResults[i].firstname + ' ' + currentResults[i].lastname + '</span>'
+			+ '<span class="contact-phone">' + currentResults[i].phone + '</span>'
+			+ '<span class="contact-email">' + currentResults[i].email + '</span>'
+			+ '<span class="contact-actions">'
+			+ '<i class="fa-solid fa-pen-to-square" onclick="editContact(' + currentResults[i].id + ')"></i>'
+			+ '<i class="fa-solid fa-trash" onclick="deleteContact(' + currentResults[i].id + ')"></i>'
+			+ '</span>'
+			+ '</div>\r\n';
+	}
+
+	document.getElementById("contactSearchResult").innerHTML = contactList;
+	renderPagination();
+}
+
+function renderPagination()
+{
+	let pagination = document.getElementById("pagination");
+	let totalPages = Math.ceil(currentResults.length / CONTACTS_PER_PAGE);
+
+	if(totalPages <= 1)
+	{
+		pagination.innerHTML = "";
+		return;
+	}
+
+	let html = '<button class="page-btn" onclick="goToPage(' + (currentPage - 1) + ')" ' + (currentPage === 1 ? 'disabled' : '') + '><i class="fa-solid fa-arrow-left"></i></button>';
+
+	for(let p = 1; p <= totalPages; p++)
+	{
+		html += '<button class="page-btn' + (p === currentPage ? ' active' : '') + '" onclick="goToPage(' + p + ')">' + p + '</button>';
+	}
+
+	html += '<button class="page-btn" onclick="goToPage(' + (currentPage + 1) + ')" ' + (currentPage === totalPages ? 'disabled' : '') + '><i class="fa-solid fa-arrow-right"></i></button>';
+
+	pagination.innerHTML = html;
+}
+
+function goToPage(page)
+{
+	let totalPages = Math.ceil(currentResults.length / CONTACTS_PER_PAGE);
+	if(page < 1 || page > totalPages) return;
+	currentPage = page;
+	renderPage();
 }
 
 function doLogin()
@@ -194,6 +257,13 @@ function doLogin()
 	let login = document.getElementById("loginName").value;
 	let password = document.getElementById("loginPassword").value;
 	var hash = md5( password );
+
+	if(login == "" || password == "")
+	{
+		document.getElementById("loginResult").innerHTML = "Please make sure all fields are filled in!";
+		return;
+	}
+
 	
 	document.getElementById("loginResult").innerHTML = "";
 
@@ -241,3 +311,53 @@ function doLogin()
 	}
 
 }
+
+function addContact()
+{
+
+}
+
+function editContact(id)
+{
+
+}
+
+function deleteContact(id)
+{
+	let confirmed = window.confirm("Are you sure you want to delete this contact?");
+	if(confirmed)
+	{
+		let tmp = {id:id};
+		let jsonPayload = JSON.stringify( tmp );
+		
+		let url = urlBase + '/Contacts/Delete.' + extension;
+
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+		try
+		{
+			xhr.onreadystatechange = function() 
+			{
+				if (this.readyState == 4 && this.status == 200) 
+				{
+					searchContacts();
+				}
+			};
+			xhr.send(jsonPayload);
+		}
+		catch(err)
+		{
+			window.alert("Error deleting contact. Please try again.");
+		}
+	}
+	renderPage();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("searchContacts").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            searchContacts();
+        }
+    });
+});
