@@ -1,4 +1,4 @@
-const urlBase = 'http://contacts.kite-keeper.com/API';
+const urlBase = 'http://localhost/API';
 const extension = 'php';
 
 let userId = 0;

@@ -19,6 +19,10 @@
         exit();
     }
 
+	// Getting paging information
+	$pages = 0;
+	$sql = "SELECT COUNT(*) FROM contacts WHERE UserID = :userid LIMIT :cacheSize";
+
 
 	# Preparing the query with placeholders
 	
