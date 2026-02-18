@@ -5,11 +5,6 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 
-//contact varibles
-let allContacts = [];
-let currentPage = 1;
-let contactsPerPage = 5;
-
 function saveCookie()
 {
 	let minutes = 20;
@@ -318,12 +313,13 @@ function doLogin()
 
 function addContact()
 {
-
+	window.location.href = 'add.html';
 }
 
 function editContact(id)
 {
-
+	localStorage.setItem('editContactId', id);
+	window.location.href = 'edit.html';
 }
 
 function deleteContact(id)
@@ -364,3 +360,130 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+
+function saveContact() {
+    let firstName = document.getElementById("contactFirstName").value.trim();
+    let lastName = document.getElementById("contactLastName").value.trim();
+    let email = document.getElementById("contactEmail").value.trim();
+    let phone = document.getElementById("contactPhone").value.trim();
+
+    if (!firstName || !lastName) {
+        document.getElementById("contactResult").innerHTML = "First and Last name are required";
+        return;
+    }
+
+    let tmp = {
+        userId: userId,
+        firstname: firstName,
+        lastname: lastName,
+        email: email,
+        phone: phone
+    };
+
+    let jsonPayload = JSON.stringify(tmp);
+    let url = urlBase + '/Contacts/Create.' + extension;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+    try {
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let jsonObject = JSON.parse(xhr.responseText);
+                
+                if (jsonObject.error === "") {
+                    window.location.href = 'contacts.html';
+                } else {
+                    document.getElementById("contactResult").innerHTML = jsonObject.error;
+                }
+            }
+        };
+        xhr.send(jsonPayload);
+    } catch(err) {
+        document.getElementById("contactResult").innerHTML = err.message;
+    }
+}
+
+function loadContactForEdit() {
+    let contactId = localStorage.getItem('editContactId');
+    
+    if (!contactId) {
+        window.location.href = 'contacts.html';
+        return;
+    }
+
+    let tmp = { id: contactId };
+    let jsonPayload = JSON.stringify(tmp);
+    let url = urlBase + '/Contacts/Read.' + extension;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+    try {
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let jsonObject = JSON.parse(xhr.responseText);
+                
+                if (jsonObject.error === "") {
+                    document.getElementById("contactFirstName").value = jsonObject.firstname || '';
+                    document.getElementById("contactLastName").value = jsonObject.lastname || '';
+                    document.getElementById("contactEmail").value = jsonObject.email || '';
+                    document.getElementById("contactPhone").value = jsonObject.phone || '';
+                }
+            }
+        };
+        xhr.send(jsonPayload);
+    } catch(err) {
+        alert("Error loading contact: " + err.message);
+    }
+}
+
+function updateContact() {
+    let contactId = localStorage.getItem('editContactId');
+    
+    let firstName = document.getElementById("contactFirstName").value.trim();
+    let lastName = document.getElementById("contactLastName").value.trim();
+    let email = document.getElementById("contactEmail").value.trim();
+    let phone = document.getElementById("contactPhone").value.trim();
+
+    if (!firstName || !lastName) {
+        document.getElementById("contactResult").innerHTML = "First and Last name are required";
+        return;
+    }
+
+    let tmp = {
+        id: contactId,
+        userId: userId,
+        firstname: firstName,
+        lastname: lastName,
+        email: email,
+        phone: phone
+    };
+
+    let jsonPayload = JSON.stringify(tmp);
+    let url = urlBase + '/Contacts/Update.' + extension;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+    try {
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let jsonObject = JSON.parse(xhr.responseText);
+                
+                if (jsonObject.error === "") {
+                    localStorage.removeItem('editContactId');
+                    window.location.href = 'contacts.html';
+                } else {
+                    document.getElementById("contactResult").innerHTML = jsonObject.error;
+                }
+            }
+        };
+        xhr.send(jsonPayload);
+    } catch(err) {
+        document.getElementById("contactResult").innerHTML = err.message;
+    }
+}
