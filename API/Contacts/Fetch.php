@@ -18,24 +18,38 @@
         returnWithError('Cache must be an integer > 0.', 400);
         exit();
     }
+	$cacheSize = intval($inData['cacheSize'], 10);
+	$userid = intval($inData['id'], 10);
+	$requestedPage = (int) $inData['pageNumber'];
 
 	// Getting paging information
-	$pages = 0;
-	$sql = "SELECT COUNT(*) FROM contacts WHERE UserID = :userid LIMIT :cacheSize";
-	echo $cacheSize;
-	$sql = "SELECT * FROM contacts WHERE UserID = :userid LIMIT :cacheSize;";
-	$stmt = $pdo->prepare($sql);
+	$offset = $requestedPage * $cacheSize;
 
-	# Running the query and populating placeLholders
-	$stmt->bindParam(':userid', $inData['id'], PDO::PARAM_STR); // Must use bindParam to set type. Can't be dont inside the execute statement
-	$stmt->bindParam(':cacheSize', $inData['cacheSize'], PDO::PARAM_INT); // Must use bindParam to set type. Can't be dont inside the execute statement
+	$sql = "SELECT COUNT(*) FROM contacts WHERE UserID = :userid";
+	$stmt = $pdo->prepare($sql);
+	$stmt->bindParam(':userid', $userid, PDO::PARAM_STR); // Must use bindParam to set type. Can't be inside the execute statement
 	$stmt->execute();
 
-    $result = [];
+	$numRows = intval($stmt->fetchColumn(), 10); 
+	$totalPages = ceil($numRows / $cacheSize);
+	if ($requestedPage > $totalPages - 1) { // Pages are 0 indexed
+		returnWithError('Page is out of bounds', 400, $totalPages);
+		exit();
+	}
+
+	$sql = "SELECT * FROM contacts WHERE UserID = :userid ORDER BY firstName LIMIT :cacheSize OFFSET :offset;";
+	$stmt = $pdo->prepare($sql);
+	$stmt->bindParam(':cacheSize', $cacheSize, PDO::PARAM_INT); // Must use bindParam to set type. Can't be inside the execute statement
+	$stmt->bindParam(':userid', $userid, PDO::PARAM_STR); // Must use bindParam to set type. Can't be inside the execute statement
+	$stmt->bindParam(':offset', $offset, PDO::PARAM_INT); // Must use bindParam to set type. Can't be inside the execute statement
+	$stmt->execute();
+
+    $queryResult = [];
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $result[] = $row;
+        $queryResult[] = $row;
     }
-    returnWithInfo($result, 200);
+	
+    returnWithInfo($queryResult, $totalPages, 200);
 
 	function getRequestInfo()
 	{
@@ -49,14 +63,13 @@
 		echo $obj;
 	}
 	
-
-
-	function returnWithError($err, $code)
+	function returnWithError($err, $code, $totalPages=-1)
 {
     // 1. Create an associative array
     $retValue = [
         "id"    => 0,
-        "error" => $err
+        "error" => $err,
+		"totalPages" => $totalPages
     ];
 
     // 2. Convert the array to a JSON string
@@ -65,9 +78,10 @@
     sendResponse($jsonResponse, $code);
 }
 	
-	function returnWithInfo($rows, $code)
+	function returnWithInfo($rows, $totalPages, $code)
 	{
 		$retValue = [
+			"totalPages" => $totalPages,
 			"results" => $rows,
 			"error" => "",
 		];
@@ -77,7 +91,7 @@
 	function isMissingParameter($inputJson) {
 		try {
 			// Requires that the posted json has at least the keys in expected. 
-			$expected = array_flip(['id', 'cacheSize']);
+			$expected = array_flip(['id', 'cacheSize', 'pageNumber']);
 	
 			$missingKeys = array_diff_key($expected, $inputJson);
 			return count($missingKeys) > 0;
