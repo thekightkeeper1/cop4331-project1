@@ -22,10 +22,6 @@
 	// Getting paging information
 	$pages = 0;
 	$sql = "SELECT COUNT(*) FROM contacts WHERE UserID = :userid LIMIT :cacheSize";
-
-
-	# Preparing the query with placeholders
-	
 	echo $cacheSize;
 	$sql = "SELECT * FROM contacts WHERE UserID = :userid LIMIT :cacheSize;";
 	$stmt = $pdo->prepare($sql);
@@ -39,11 +35,7 @@
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $result[] = $row;
     }
-    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
     returnWithInfo($result, 200);
-
-	# Closing the cursor we used. Not necessary unless we didn't read all of the rows.
-	// $stmt->closeCursor(); #todo remove this?
 
 	function getRequestInfo()
 	{
