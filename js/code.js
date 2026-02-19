@@ -1,4 +1,4 @@
-const urlBase = 'http://contacts.kite-keeper.com/API';
+const urlBase = 'http://localhost/API';
 const extension = 'php';
 
 let userId = 0;
@@ -49,37 +49,6 @@ function doLogout()
 	lastName = "";
 	document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
 	window.location.href = "index.html";
-}
-
-function addContact()
-{
-	let newColor = document.getElementById("colorText").value;
-	document.getElementById("colorAddResult").innerHTML = "";
-
-	let tmp = {color:newColor,userId,userId};
-	let jsonPayload = JSON.stringify( tmp );
-
-	let url = urlBase + '/Contacts/AddContact.' + extension;
-	
-	let xhr = new XMLHttpRequest();
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	try
-	{
-		xhr.onreadystatechange = function() 
-		{
-			if (this.readyState == 4 && this.status == 200) 
-			{
-				document.getElementById("colorAddResult").innerHTML = "Color has been added";
-			}
-		};
-		xhr.send(jsonPayload);
-	}
-	catch(err)
-	{
-		document.getElementById("colorAddResult").innerHTML = err.message;
-	}
-	
 }
 
 function doRegister()
@@ -311,10 +280,10 @@ function doLogin()
 
 }
 
-/*function addContact()
+function addContact()
 {
 	window.location.href = 'add.html';
-}*/
+}
 
 function editContact(id, firstname, lastname, email, phone)
 {
