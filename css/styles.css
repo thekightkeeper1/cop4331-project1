@@ -249,20 +249,52 @@ html {
     scrollbar-gutter: stable;
 }
 
-#colorSearchResult{
-    display: none;
+#contactFormDiv {
+    max-width: 500px;
+    width: 90%;
+    margin: 80px auto;
+    padding: 60px 50px;
+    background-color: var(--text-white);
+    border-radius: 20px;
+    box-shadow: 0 8px 24px var(--shadow);
 }
 
-#colorAddResult{
-    display: inline-block;
-    font-size: 0.8em;
-    width: 90%;
+#contactFormDiv h2 {
     text-align: center;
-    margin-left: 5%;
-    margin-top: 2%;
-    margin-bottom: 1%;
-    font-family: 'Ubuntu', sans-serif;
-    color: #95060a;
+    color: var(--primary);
+    font-size: 32px;
+    margin: 0 0 40px 0;
+}
+
+#contactFormDiv input[type="text"],
+#contactFormDiv input[type="email"],
+#contactFormDiv input[type="tel"] {
+    width: 100%;
+    padding: 18px;
+    margin-bottom: 20px;
+    border-radius: var(--big-radius);
+    border: none;
+    background-color: var(--input);
+    font-size: 18px;
+    text-align: center;
+    font-family: var(--font);
+    box-sizing: border-box;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.form-buttons .buttons {
+    flex: 1;
+    margin-top: 0;
+}
+
+.cancel-button {
+    background-color: var(--input) !important;
+    color: var(--text) !important;
 }
 
 #searchBar {

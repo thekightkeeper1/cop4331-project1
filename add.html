@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add Contact - COP 4331</title>
+	<script type="text/javascript" src="js/code.js"></script>
+    <link href="css/styles.css" rel="stylesheet">	
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+</head>
+<body onload="readCookie();">
+
+<!-- Header -->
+<div id="header">
+	<img id="logo" src="images/logo.png" alt="Logo">
+	<h1 id="title">COP 4331 Contacts App</h1>
+	<button onclick="doLogout();" class="header-button">Logout</button>
+</div>
+
+<!-- Add Contact Form -->
+<div id="contactFormDiv">
+	<h2>Add Contact</h2>
+	<input type="text" id="contactFirstName" placeholder="First Name" />
+	<input type="text" id="contactLastName" placeholder="Last Name" />
+	<input type="email" id="contactEmail" placeholder="Email" />
+	<input type="tel" id="contactPhone" placeholder="Phone Number" />
+	<div class="form-buttons">
+		<button onclick="saveContact();" class="buttons">Add User</button>
+		<button onclick="window.location.href='contacts.html';" class="buttons cancel-button">Cancel</button>
+	</div>
+	<span id="contactResult"></span>
+</div>
+
+</body>
+</html>
