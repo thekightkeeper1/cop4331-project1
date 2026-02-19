@@ -8,7 +8,7 @@
 
     // insert contact into list at user id
     $sql = "INSERT INTO contacts (firstName, lastName, email, phone, userId) 
-            VALUES (:firstName, :lastName, :email, :phone, :userID)";
+            VALUES (:firstName, :lastName, :email, :phone, :userId)";
     $stmt = $pdo->prepare($sql);
 
     $worked = $stmt->execute([      
