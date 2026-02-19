@@ -311,10 +311,10 @@ function doLogin()
 
 }
 
-function addContact()
+/*function addContact()
 {
 	window.location.href = 'add.html';
-}
+}*/
 
 function editContact(id, firstname, lastname, email, phone)
 {
@@ -479,4 +479,10 @@ function updateContact() {
     } catch(err) {
         document.getElementById("contactResult").innerHTML = err.message;
     }
+}
+
+function loadContacts()
+{
+    document.getElementById("searchContacts").value = "";
+    searchContacts();
 }
