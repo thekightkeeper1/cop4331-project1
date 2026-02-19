@@ -14,7 +14,7 @@
 	}
 
 	# Preparing the query with placeholders
-	$sql = "SELECT * FROM contacts WHERE UserID = :userid AND firstname LIKE :query";
+	$sql = "SELECT * FROM contacts WHERE UserID = :userid AND LOWER(firstname) LIKE LOWER(:query)";
 	$stmt = $pdo->prepare($sql);
 
 	# Running the query and populating placeLholders
