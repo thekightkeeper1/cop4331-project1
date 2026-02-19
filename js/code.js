@@ -206,7 +206,7 @@ function renderPage()
 			+ '<span class="contact-phone">' + currentResults[i].phone + '</span>'
 			+ '<span class="contact-email">' + currentResults[i].email + '</span>'
 			+ '<span class="contact-actions">'
-			+ '<i class="fa-solid fa-pen-to-square" onclick="editContact(' + currentResults[i].id + ', \'' + currentResults[i].firstname + '\', \'' + currentResults[i].lastname + '\', \'' + currentResults[i].email + '\', \'' + currentResults[i].phone + '\')"></i>'
+			+ '<i class="fa-solid fa-pen-to-square" onclick="editContact(' + currentResults[i].ID + ', \'' + currentResults[i].firstname + '\', \'' + currentResults[i].lastname + '\', \'' + currentResults[i].email + '\', \'' + currentResults[i].phone + '\')"></i>'
 			+ '<i class="fa-solid fa-trash" onclick="deleteContact(' + currentResults[i].ID + ')"></i>'
 			+ '</span>'
 			+ '</div>\r\n';
