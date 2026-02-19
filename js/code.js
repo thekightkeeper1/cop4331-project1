@@ -13,7 +13,7 @@ function saveCookie()
 	document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ";expires=" + date.toGMTString();
 }
 
-/*function readCookie()
+function readCookie()
 {
 	userId = -1;
 	let data = document.cookie;
@@ -40,7 +40,7 @@ function saveCookie()
 	{
 		window.location.href = "index.html";
 	}
-}*/
+}
 
 function doLogout()
 {
@@ -154,7 +154,7 @@ function searchContacts()
 	let tmp = {query:srch,userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
 
-	let url = urlBase + '/Contacts/Search.' + extension;
+	let url = urlBase + '/Contacts/SearchContacts.' + extension;
 	
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
@@ -206,7 +206,7 @@ function renderPage()
 			+ '<span class="contact-phone">' + currentResults[i].phone + '</span>'
 			+ '<span class="contact-email">' + currentResults[i].email + '</span>'
 			+ '<span class="contact-actions">'
-			+ '<i class="fa-solid fa-pen-to-square" onclick="editContact(' + currentResults[i].id + ')"></i>'
+			+ '<i class="fa-solid fa-pen-to-square" onclick="editContact(' + currentResults[i].id + ', \'' + currentResults[i].firstname + '\', \'' + currentResults[i].lastname + '\', \'' + currentResults[i].email + '\', \'' + currentResults[i].phone + '\')"></i>'
 			+ '<i class="fa-solid fa-trash" onclick="deleteContact(' + currentResults[i].ID + ')"></i>'
 			+ '</span>'
 			+ '</div>\r\n';
@@ -316,9 +316,17 @@ function addContact()
 	window.location.href = 'add.html';
 }
 
-function editContact(id)
+function editContact(id, firstname, lastname, email, phone)
 {
-	localStorage.setItem('editContactId', id);
+	// storing all contact data in localStorage
+	let contactData = {
+		id: id,
+		firstname: firstname,
+		lastname: lastname,
+		email: email,
+		phone: phone
+	};
+	localStorage.setItem('editContactData', JSON.stringify(contactData));
 	window.location.href = 'edit.html';
 }
 
@@ -330,7 +338,7 @@ function deleteContact(id)
 		let tmp = {id:id};
 		let jsonPayload = JSON.stringify( tmp );
 		
-		let url = urlBase + '/Contacts/Delete.' + extension;
+		let url = urlBase + '/Contacts/DeleteContact.' + extension;  // Fixed
 
 		let xhr = new XMLHttpRequest();
 		xhr.open("POST", url, true);
@@ -354,11 +362,14 @@ function deleteContact(id)
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("searchContacts").addEventListener("keyup", function(event) {
-        if (event.key === "Enter") {
-            searchContacts();
-        }
-    });
+    let searchInput = document.getElementById("searchContacts");
+    if (searchInput) {
+        searchInput.addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                searchContacts();
+            }
+        });
+    }
 });
 
 function saveContact() {
@@ -374,14 +385,14 @@ function saveContact() {
 
     let tmp = {
         userId: userId,
-        firstname: firstName,
-        lastname: lastName,
+        firstName: firstName,  
+        lastName: lastName,    
         email: email,
         phone: phone
     };
 
     let jsonPayload = JSON.stringify(tmp);
-    let url = urlBase + '/Contacts/Create.' + extension;
+    let url = urlBase + '/Contacts/AddContact.' + extension;
 
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
@@ -406,42 +417,25 @@ function saveContact() {
 }
 
 function loadContactForEdit() {
-    let contactId = localStorage.getItem('editContactId');
+    let contactData = localStorage.getItem('editContactData');
     
-    if (!contactId) {
+    if (!contactData) {
         window.location.href = 'contacts.html';
         return;
     }
 
-    let tmp = { id: contactId };
-    let jsonPayload = JSON.stringify(tmp);
-    let url = urlBase + '/Contacts/Read.' + extension;
-
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-
-    try {
-        xhr.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                let jsonObject = JSON.parse(xhr.responseText);
-                
-                if (jsonObject.error === "") {
-                    document.getElementById("contactFirstName").value = jsonObject.firstname || '';
-                    document.getElementById("contactLastName").value = jsonObject.lastname || '';
-                    document.getElementById("contactEmail").value = jsonObject.email || '';
-                    document.getElementById("contactPhone").value = jsonObject.phone || '';
-                }
-            }
-        };
-        xhr.send(jsonPayload);
-    } catch(err) {
-        alert("Error loading contact: " + err.message);
-    }
+    let contact = JSON.parse(contactData);
+    
+    document.getElementById("contactFirstName").value = contact.firstname || '';
+    document.getElementById("contactLastName").value = contact.lastname || '';
+    document.getElementById("contactEmail").value = contact.email || '';
+    document.getElementById("contactPhone").value = contact.phone || '';
 }
 
 function updateContact() {
-    let contactId = localStorage.getItem('editContactId');
+    let contactData = localStorage.getItem('editContactData');
+    let contact = JSON.parse(contactData);
+    let contactId = contact.id;
     
     let firstName = document.getElementById("contactFirstName").value.trim();
     let lastName = document.getElementById("contactLastName").value.trim();
@@ -455,15 +449,14 @@ function updateContact() {
 
     let tmp = {
         id: contactId,
-        userId: userId,
-        firstname: firstName,
-        lastname: lastName,
+        firstName: firstName,  
+        lastName: lastName,   
         email: email,
         phone: phone
     };
 
     let jsonPayload = JSON.stringify(tmp);
-    let url = urlBase + '/Contacts/Update.' + extension;
+    let url = urlBase + '/Contacts/EditContact.' + extension; 
 
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
@@ -475,7 +468,7 @@ function updateContact() {
                 let jsonObject = JSON.parse(xhr.responseText);
                 
                 if (jsonObject.error === "") {
-                    localStorage.removeItem('editContactId');
+                    localStorage.removeItem('editContactData');  // Clean up
                     window.location.href = 'contacts.html';
                 } else {
                     document.getElementById("contactResult").innerHTML = jsonObject.error;
