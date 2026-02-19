@@ -2,6 +2,7 @@
 <?php
 
 	require_once '../db_config.php';
+	require_once '../utils.php';
 
     # Get the post request body
 	if (!valid_body()) {
@@ -45,7 +46,7 @@
 		return json_decode(file_get_contents('php://input'), true);
 	}
 
-	function sendResultInfoAsJson( $obj, $code)
+	function sendResponse( $obj, $code)
 	{
 		http_response_code($code);
 		header('Content-type: application/json');
@@ -55,27 +56,22 @@
 	function returnWithError( $err, $code )
 	{
 		$retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
-		sendResultInfoAsJson( $retValue,  $code);
+		sendResponse( $retValue,  $code);
 	}
 	
 	function returnWithInfo($code, $firstName, $lastName, $id )
 	{
 		$retValue = '{"id":' . $id . ',"firstName":"' . $firstName . '","lastName":"' . $lastName . '","error":""}';
-		sendResultInfoAsJson( $retValue, $code );
+		sendResponse( $retValue, $code );
 	}
 
 
-	// Some error checking functions
-	function isMissingParameter($inputJson) {
+	// Some error checking function
+    function isMissingParameter($inputJson) {
 		// Requires that the posted json has at least the keys in expected. 
 		$expected = array_flip(['userName', 'password']);
 
 		$missingKeys = array_diff_key($expected, $inputJson);
 		return count($missingKeys) != 0;
-	}
-
-		function valid_body() {
-		$json = file_get_contents("php://input");
-		return json_validate($json);
 	}
 ?>
