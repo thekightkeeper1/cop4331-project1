@@ -1,0 +1,467 @@
+openapi: 3.0.0
+info:
+  title: Contact Manager API
+  description: API for the Kite Keeper contact management system.
+  version: 1.0.0
+servers:
+  - url: http://contacts.kite-keeper.com/API
+    description: Production Server
+  - url: http://localhost/API
+    description: Local Development
+
+tags:
+  - name: Authentication
+    description: User login and registration operations
+  - name: Contacts
+    description: Operations for managing and searching user contacts
+
+paths:
+  # --- AUTHENTICATION ---
+  /Auth/Login.php:
+    post:
+      tags:
+        - Authentication
+      summary: User Login
+      description: Authenticates a user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successful Login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Error (Missing Keys or Invalid JSON)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              example:
+                id: 0
+                firstName: ""
+                lastName: ""
+                error: "Missing or incorrect json keys."
+        '401':
+          description: Login Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              example:
+                id: 0
+                firstName: ""
+                lastName: ""
+                error: "No Records Found"
+
+  /Auth/Register.php:
+    post:
+      tags:
+        - Authentication
+      summary: Register New User
+      description: Creates a new user account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '200':
+          description: User Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+              example:
+                id: 0
+                error: "Invalid input provided"
+        '409':
+          description: User Already Exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+              example:
+                id: 0
+                error: "Username already exists"
+
+  # --- CONTACT OPERATIONS ---
+  /Contacts/Search.php:
+    post:
+      tags:
+        - Contacts
+      summary: Search Contacts
+      description: Searches for contacts matching a first name query, case insensitive.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Search Results Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactListResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactListResponse'
+              example:
+                results: []
+                error: "Malformed json"
+
+  /Contacts/FetchPage.php:
+    post:
+      tags:
+        - Contacts
+      summary: Load pages of contacts
+      description: Loads a cacheSize amount of contacts offset by page*cacheSize
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FetchPageRequest'
+      responses:
+        '200':
+          description: Contacts Loaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FetchPageResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FetchPageResponse'
+              example:
+                totalPages: -1
+                results: []
+                error: "Missing or incorrect json keys."
+
+  /Contacts/EditContact.php:
+    post:
+      tags:
+        - Contacts
+      summary: Update Contact Fields
+      description: Update contact of a specified id so that it matches the body of the request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditContactRequest'
+      responses:
+        '200':
+          description: Successful Edit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditContactResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditContactResponse'
+              example:
+                error: "Malformed JSON"
+
+
+  /Contacts/AddContact.php:
+    post:
+      tags:
+        - Contacts
+      summary: Add a new contact
+      description: Add a contact to a user's list by specifying the user id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddContactRequest'
+      responses:
+        '200':
+          description: Successful or unsuccessful add
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddContactResponse'
+
+  /Contacts/DeleteContact.php:
+    post:
+      tags:
+        - Contacts
+      summary: Delete a new contact
+      description: Delete a contact to a user's list by specifying the contact id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteContactRequest'
+      responses:
+        '200':
+          description: Successful or unsuccessful Delete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteContactResponse'
+          
+
+
+components:
+  schemas:
+    # --- REQUEST SCHEMAS ---
+    LoginRequest:
+      type: object
+      required: [userName, password]
+      properties:
+        userName:
+          type: string
+          example: "Ty"
+        password:
+          type: string
+          format: password
+          example: "SecretPass123"
+
+    RegisterRequest:
+      type: object
+      required: [firstName, lastName, userName, password]
+      properties:
+        firstName:
+          type: string
+          example: "Ty"
+        lastName:
+          type: string
+          example: "Singh"
+        userName:
+          type: string
+          example: "ty_keeper"
+        password:
+          type: string
+          format: password
+          example: "StrongPassword123"
+
+    SearchRequest:
+      type: object
+      required: [userId, query]
+      properties:
+        userId:
+          type: integer
+          example: 15
+        query:
+          type: string
+          example: "J"
+
+    FetchPageRequest:
+      type: object
+      required: [id, cacheSize, pageNumber]
+      properties:
+        id:
+          type: integer
+          example: 15
+        cacheSize:
+          type: integer
+          example: 10
+        pageNumber:
+          type: integer
+          example: 0
+
+    EditContactRequest:
+      type: object
+      required: [id, firstName, lastName, email, phone]
+      properties:
+        id:
+          type: integer
+          example: 15
+        firstName:
+          type: string
+          example: "Tyler"
+        lastName:
+          type: string
+          example: "Matthew"
+        email:
+          type: string
+          example: "tdawg1337@example.com"
+        phone:
+          type: string
+          example: "12345678912"
+
+    DeleteContactRequest:
+      type: object
+      required: [id]
+      properties:
+        id:
+          type: integer
+          example: 1
+        
+
+    AddContactRequest:
+      type: object
+      required: [userId, firstName, lastName, email, phone]
+      properties:
+        userId:
+          type: integer
+          example: 2
+        firstName:
+          type: string
+          example: "Tyler"
+        lastName:
+          type: string
+          example: "Matthew"
+        email:
+          type: string
+          example: "tdawg1337@example.com"
+        phone:
+          type: string
+          example: "12345678912"
+
+    # --- RESPONSE SCHEMAS ---
+    LoginResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        firstName:
+          type: string
+          example: "john"
+        lastName:
+          type: string
+          example: "Doe"
+        error:
+          type: string
+          example: ""
+
+    RegisterResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        error:
+          type: string
+          example: ""
+
+    Contact:
+      type: object
+      properties:
+        ID:
+          type: integer
+          example: 101
+        FirstName:
+          type: string
+          example: "Jane"
+        LastName:
+          type: string
+          example: "Smith"
+        Phone:
+          type: string
+          example: "555-0199"
+        Email:
+          type: string
+          example: "jane.smith@example.com"
+        UserID:
+          type: integer
+          example: 15
+
+    ContactListResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+        error:
+          type: string
+      example:
+        results:
+          - ID: 101
+            FirstName: "Jane"
+            LastName: "Smith"
+            Phone: "555-0101"
+            Email: "jane@example.com"
+            UserID: 15
+          - ID: 102
+            FirstName: "john"
+            LastName: "Doe"
+            Phone: "555-0102"
+            Email: "john@example.com"
+            UserID: 15
+        error: ""
+
+    FetchPageResponse:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+        error:
+          type: string
+      example:
+        totalPages: 5
+        results:
+          - ID: 101
+            FirstName: "Jane"
+            LastName: "Smith"
+            Phone: "555-0101"
+            Email: "jane@example.com"
+            UserID: 15
+          - ID: 102
+            FirstName: "John"
+            LastName: "Doe"
+            Phone: "555-0102"
+            Email: "john@example.com"
+            UserID: 15
+        error: ""
+
+    EditContactResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: ""
+
+    DeleteContactResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "Person Removed"
+        error:
+          type: string
+          example: ""
+
+    AddContactResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: Person Added
+        error:
+          type: string
+          example: ""
+
+    
