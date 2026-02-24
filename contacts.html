@@ -1,32 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>COP 4331 Contacts App</title>
-	<script type="text/javascript" src="js/md5.js"></script>
-	<script type="text/javascript" src="js/code.js"></script>
-    <link href="css/styles.css" rel="stylesheet">	
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+	<meta charset="UTF-8">
+	<meta name="description" content="View and manage your contacts in The Banana Bunch contact manager.">
+	<title>The Banana Bunch</title>
+	<link rel="preload" href="images/logo.png" as="image">
+	<link href="css/styles.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link rel="icon" type="image/x-icon" href="/images/favicon.png">
+	<script defer src="js/md5.js"></script>
+	<script defer src="js/code.js"></script>
 </head>
 <body onload="readCookie(); loadContacts();">
 
 <!--header-->
 <div id = "header">
-	<img id = "logo" src="images/logo.png" alt="Logo">
-	<h1 id = "title">COP 4331 Contacts App</h1>
+	<img id = "logo" src="images/logo.png" alt="Logo" width="500" height="500">
+	<h1 id = "title">The Banana Bunch</h1>
 	<a href = "index.html" class="header-button">Logout</a>
 </div>
 
+<main>
 <div id="searchBar">
 	<input type="text" id="searchContacts" placeholder="Search name" />
-	<i id="searchIcon" class="fas fa-search" onclick="searchContacts();"></i>
-	<i id="addIcon" class="fa-solid fa-plus" onclick="addContact();"></i>
+	<button type="button" id="searchButton" class="icon-buttons" onclick="searchContacts();" aria-label="Search Contacts">
+		<i class="fas fa-search"></i>
+	</button>
+	<button type="button" id="addContactButton" class="icon-buttons" onclick="addContact();" aria-label="Add New Contact">
+		<i class="fa-solid fa-plus"></i>
+	</button>
 </div>
 
-<span id="contactSearchResult"></span>
+<div id="contactSearchResult"></div>
 
 <div id="pagination"></div>
-
+</main>
 </body>
 </html>
