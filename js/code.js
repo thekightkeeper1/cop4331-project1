@@ -1,4 +1,4 @@
-const urlBase = 'http://contacts.kite-keeper.com/API';
+const urlBase = 'http://localhost/API';
 const extension = 'php';
 
 let userId = 0;
@@ -119,6 +119,15 @@ function searchContacts()
 	readCookie();
 	let srch = document.getElementById("searchContacts").value;
 	document.getElementById("contactSearchResult").innerHTML = "";
+
+	if(srch.toLowerCase() === "banana")
+	{
+		bananaRain();
+		document.getElementById("contactSearchResult").innerHTML = "It's banana time!";
+		currentResults = [];
+		renderPagination();
+		return;
+	}
 
 	let tmp = {query:srch,userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
@@ -454,4 +463,30 @@ function loadContacts()
 {
     document.getElementById("searchContacts").value = "";
     searchContacts();
+}
+
+function bananaRain()
+{
+	// Create 20 bananas that fall down the screen
+	for(let i = 0; i < 20; i++)
+	{
+		// Create a banana element
+		let banana = document.createElement("div");
+		banana.textContent = "🍌";
+		banana.style.position = "fixed";
+		banana.style.left = Math.random() * 100 + "vw";
+		banana.style.top = "-50px";
+		banana.style.fontSize = "30px";
+		banana.style.zIndex = "9999";
+		document.body.appendChild(banana);
+
+		setTimeout(function() {
+			banana.style.transition = "top 3s ease-in";
+			banana.style.top = "110vh";
+
+			setTimeout(function() {
+				banana.remove();
+			}, 3000);
+		}, i * 100);
+	}
 }
