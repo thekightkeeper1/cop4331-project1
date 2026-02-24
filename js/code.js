@@ -196,14 +196,14 @@ function renderPagination()
 		return;
 	}
 
-	let html = '<button class="page-btn" onclick="goToPage(' + (currentPage - 1) + ')" ' + (currentPage === 1 ? 'disabled' : '') + '><i class="fa-solid fa-arrow-left"></i></button>';
+	let html = '<button class="page-btn" aria-label="Previous Page" onclick="goToPage(' + (currentPage - 1) + ')" ' + (currentPage === 1 ? 'disabled' : '') + '><i class="fa-solid fa-arrow-left"></i></button>';
 
 	for(let p = 1; p <= totalPages; p++)
 	{
 		html += '<button class="page-btn' + (p === currentPage ? ' active' : '') + '" onclick="goToPage(' + p + ')">' + p + '</button>';
 	}
 
-	html += '<button class="page-btn" onclick="goToPage(' + (currentPage + 1) + ')" ' + (currentPage === totalPages ? 'disabled' : '') + '><i class="fa-solid fa-arrow-right"></i></button>';
+	html += '<button class="page-btn" aria-label="Next Page" onclick="goToPage(' + (currentPage + 1) + ')" ' + (currentPage === totalPages ? 'disabled' : '') + '><i class="fa-solid fa-arrow-right"></i></button>';
 
 	pagination.innerHTML = html;
 }
