@@ -361,6 +361,16 @@ function saveContact() {
         return;
     }
 
+    if (email && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) {
+        document.getElementById("contactResult").innerHTML = "Please enter a valid email address";
+        return;
+    }
+
+    if (phone && !(/^\d{10}$/.test(phone.replace(/[\s\-\(\)]/g, '')))) {
+        document.getElementById("contactResult").innerHTML = "Phone number must be 10 digits";
+        return;
+    }
+
     let tmp = {
         userId: userId,
         firstName: firstName,  
@@ -422,6 +432,16 @@ function updateContact() {
 
     if (!firstName || !lastName) {
         document.getElementById("contactResult").innerHTML = "First and Last name are required";
+        return;
+    }
+
+    if (email && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) {
+        document.getElementById("contactResult").innerHTML = "Please enter a valid email address";
+        return;
+    }
+
+    if (phone && !(/^\d{10}$/.test(phone.replace(/[\s\-\(\)]/g, '')))) {
+        document.getElementById("contactResult").innerHTML = "Phone number must be 10 digits";
         return;
     }
 
