@@ -1,9 +1,9 @@
 
 # TODO
 - Setting up
-  [x] Docker
-  [x] barebones
-[x] easter egg
+  - [x] Docker
+  - [x] barebones
+- [x] easter egg
   - banana
 
 # About
